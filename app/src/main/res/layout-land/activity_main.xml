@@ -9,14 +9,14 @@
         android:layout_height="match_parent"
         android:background="@color/home_background">
     </ImageView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/humansOfTheWorld"
-            android:textColor="@color/white"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/home_heading_size"
-            />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/humansOfTheWorld"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/home_heading_size"
+        />
 
 </RelativeLayout>
