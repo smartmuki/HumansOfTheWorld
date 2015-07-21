@@ -1,29 +1,24 @@
 package com.smartmuki.humans.humansoftheworld;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.facebook.FacebookSdk;
 
 
-public class MainActivity extends Activity {
+public class PostActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_post);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_post, menu);
         return true;
     }
 
@@ -40,18 +35,5 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(MainActivity.this,PostActivity.class);
-                startActivity(i);
-            }
-        });
     }
 }

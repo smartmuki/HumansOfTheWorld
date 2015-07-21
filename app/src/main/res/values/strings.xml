@@ -3,4 +3,6 @@
 
     <string name="humansOfTheWorld">HUMANS OF THE WORLD</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_post">PostActivity</string>
+    <string name="hello_world">Hello world!</string>
 </resources>

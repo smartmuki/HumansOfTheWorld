@@ -7,6 +7,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -20,6 +22,14 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.smartmuki.humans.humansoftheworld.MainActivity" />
+        </activity>
+        <activity
+            android:name=".PostActivity"
+            android:label="@string/title_activity_post"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
