@@ -76,7 +76,7 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
 //                .appendQueryParameter("page", pageNumber.toString())
 //                .appendQueryParameter("api_key", api_key);
 //        String jsonStr = getDataFromServer(builder.build().toString());
-//        String jsonStr = '{"data":[{"id":"578651408856087_687323097988917","object_id":"687323011322259","message":"'If I could do anything differently I would take more risks and not be too scared. I would go with my heart instead of going with the safe option.''What's the safe option?''Just sticking to what I know or following everybody else. I would go with what I think is best and if it didn't work out I could just go back to where I started and try again.'","full_picture":"https://scontent.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/s720x720/10177475_68732…_1927566292692213994_n.jpg?oh=d43968bdbd8b53be169dcc93eac0e101&oe=5648424B"}]}';
+//        String jsonStr = '{"data":[{"id":"578651408856087_687323097988917","object_id":"687323011322259","message":"'If I could do anything differently I would take more risks and not be too scared. I would go with my heart instead of going with the safe option.''What's the safe option?''Just sticking to what I know or following everybody else. I would go with what I think is best and if it didn't work out I could just go back to where I started and try again.'","full_picture":"https://scontent.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/s720x720/10177475_68732_1927566292692213994_n.jpg?oh=d43968bdbd8b53be169dcc93eac0e101&oe=5648424B"}]}';
         return getPosts("");
     }
 

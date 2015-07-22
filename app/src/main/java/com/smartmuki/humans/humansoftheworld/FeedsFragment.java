@@ -17,11 +17,11 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PostActivityFragment extends Fragment {
+public class FeedsFragment extends Fragment {
 
     @Bind(R.id.material_listview)
     MaterialListView mListView ;
-    public PostActivityFragment() {
+    public FeedsFragment() {
     }
 
     @Override
