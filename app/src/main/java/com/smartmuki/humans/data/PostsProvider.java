@@ -13,7 +13,7 @@ import android.util.Log;
 /**
  * Created by abmitra on 6/28/2015.
  */
-public class MovieProvider extends ContentProvider {
+public class PostsProvider extends ContentProvider {
     SQLiteOpenHelper mOpenHelper;
     private static SQLiteQueryBuilder queryBuilder;
     private static SQLiteQueryBuilder favQueryBuilder;

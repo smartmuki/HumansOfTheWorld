@@ -2,21 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <ImageView
+    tools:context=".MainActivity" android:background="@color/home_background">
+    
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/home_background">
-    </ImageView>
+        android:padding="16dp"
+        android:layout_height="match_parent">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/humansOfTheWorld"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textSize="@dimen/home_heading_size"
+
             />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>
