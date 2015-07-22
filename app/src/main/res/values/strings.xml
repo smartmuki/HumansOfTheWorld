@@ -9,4 +9,7 @@
     <!-- Facebook configs -->
     <string name="fb_app_id">1450804418560617</string>
     <string name="title_activity_feeds">Feeds</string>
+    <string name="content_authority">android.smartmuki.posts</string>
+    <string name="sync_account_type">android.smartmuki.com</string>
+    <string name="sync_account">android.smartmuki.com</string>
 </resources>

@@ -24,14 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -46,18 +39,21 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
        int nextPage =  extras.getInt("nextPage");
         String sort = extras.getString("sortBy");
-        doInBackground(nextPage + "",sort,"a670cb5c49630b38e1ca06f0cd82b8eb","api.themoviedb.org");
+        doInBackground();
 
     }
-    protected ArrayList<Post> doInBackground(String pageNumber,String sort,String api_key,String Url) {
-        if(!Utility.isInternetAvailable(getContext())){
-
-            return null;
-        }
+    protected ArrayList<Post> doInBackground() {
+        Log.e(TAG,"I am executing");
+//        if(!Utility.isInternetAvailable(getContext())){
+//
+//            return null;
+//        }
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","id,object_id,message,description,full_picture,source");
         GraphResponse res = new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
-                "/me",
-                null,
+                "/HumansofNotts/posts",
+                parameters,
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
@@ -65,26 +61,13 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
         ).executeAndWait();
-//        Uri.Builder builder = new Uri.Builder();
-//        builder
-//                .scheme("http")
-//                .authority(Url)
-//                .appendPath("3")
-//                .appendPath("discover")
-//                .appendPath("movie")
-//                .appendQueryParameter("sort_by", sort)
-//                .appendQueryParameter("page", pageNumber.toString())
-//                .appendQueryParameter("api_key", api_key);
-//        String jsonStr = getDataFromServer(builder.build().toString());
-//        String jsonStr = '{"data":[{"id":"578651408856087_687323097988917","object_id":"687323011322259","message":"'If I could do anything differently I would take more risks and not be too scared. I would go with my heart instead of going with the safe option.''What's the safe option?''Just sticking to what I know or following everybody else. I would go with what I think is best and if it didn't work out I could just go back to where I started and try again.'","full_picture":"https://scontent.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/s720x720/10177475_68732_1927566292692213994_n.jpg?oh=d43968bdbd8b53be169dcc93eac0e101&oe=5648424B"}]}';
-        return getPosts("");
+        return getPosts(res.getJSONObject());
     }
 
-    protected ArrayList<Post> getPosts(String jsonStr){
+    protected ArrayList<Post> getPosts( JSONObject jsonObj){
         ArrayList<Post> posts = null;
         try {
-            JSONObject jsonObj = new JSONObject(jsonStr);
-            JSONArray list = jsonObj.getJSONArray("results");
+            JSONArray list = jsonObj.getJSONArray("data");
             Gson gson = new Gson();
             Type collectionType = new TypeToken<List<Post>>() {
             }.getType();
@@ -114,60 +97,8 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
     }
-    protected  String getDataFromServer(String urlStr){
-        HttpURLConnection urlConnection = null;
-        String result = null;
-        BufferedReader reader = null;
 
-        try {
-            URL url = new URL(urlStr);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if(inputStream==null){
-                result = null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line=reader.readLine())!=null){
-                buffer.append(line + "\n");
-            }
 
-            if(buffer.length() == 0){
-                result = null;
-            }
-
-            result = buffer.toString();
-
-        } catch (MalformedURLException e){
-            Log.e(TAG, "Url is bad", e);
-
-        }catch (IOException e){
-            Log.e(TAG, "IO Exception", e);
-
-        }catch (Exception e){
-            Log.e(TAG, "Something went wrong", e);
-        }
-        finally {
-            closeConnections(urlConnection,reader);
-        }
-        return result;
-    }
-
-    protected void closeConnections(HttpURLConnection urlConnection, BufferedReader reader){
-        if (urlConnection != null) {
-            urlConnection.disconnect();
-        }
-        if (reader != null) {
-            try {
-                reader.close();
-            } catch (final IOException e) {
-                Log.e(TAG, "Error closing stream", e);
-            }
-        }
-    }
     public PostSyncAdapter(
             Context context,
             boolean autoInitialize,

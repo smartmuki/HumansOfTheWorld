@@ -24,14 +24,14 @@ public class PostsDbHelper extends SQLiteOpenHelper {
                 PostsContract.PostEntry.COLUMN_ID+ " TEXT UNIQUE NOT NULL, " +
                 PostsContract.PostEntry.COLUMN_OBJECT_ID + " REAL UNIQUE NOT NULL, " +
                 PostsContract.PostEntry.COLUMN_MESSAGE+ " TEXT NOT NULL, " +
-                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL "+
                 " );";
         final String SQL_CREATE_FAV_TABLE = "CREATE TABLE " + PostsContract.FavoriteEntry.TABLE_NAME + " (" +
                 PostsContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 PostsContract.FavoriteEntry.COLUMN_ID+ " TEXT UNIQUE NOT NULL, " +
                 PostsContract.FavoriteEntry.COLUMN_OBJECT_ID + " REAL UNIQUE NOT NULL, " +
                 PostsContract.FavoriteEntry.COLUMN_MESSAGE+ " TEXT NOT NULL, " +
-                PostsContract.FavoriteEntry.COLUMN_PICTURE + " TEXT NOT NULL, "+
+                PostsContract.FavoriteEntry.COLUMN_PICTURE + " TEXT NOT NULL "+
                 " );";
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAV_TABLE);

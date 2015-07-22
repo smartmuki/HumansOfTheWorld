@@ -1,5 +1,9 @@
 package com.smartmuki.humans.entities;
 
+import android.database.Cursor;
+
+import com.smartmuki.humans.humansoftheworld.Constants;
+
 import java.net.URL;
 
 /**
@@ -17,6 +21,13 @@ public class Post {
         this.object_id = object_id;
         this.message = message;
         this.full_picture = full_picture;
+    }
+    public Post(Cursor c){
+        this(c.getString(Constants.COL_POST_FB_ID),
+                c.getLong(Constants.COL_POST_OBJECT_ID),
+                c.getString(Constants.COL_POST_MESSAGE),
+                c.getString(Constants.COL_POST_PICTURE));
+        this._ID = c.getLong(Constants.COL_POST_ID);
     }
     public long get_ID() {
         return _ID;
