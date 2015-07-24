@@ -15,18 +15,57 @@ public class Post {
     private long object_id;
     private String message;
     private String full_picture;
+    private Boolean is_favorite;
+    private long page_id;
+    private String page_title;
 
-    public Post(String id, long object_id,String message,String full_picture){
+    public void setPage_title(String page_title) {
+        this.page_title = page_title;
+    }
+
+    public void setPage_id(long page_id) {
+        this.page_id = page_id;
+    }
+
+    public String getPage_title() {
+        return page_title;
+    }
+
+    public long getPage_id() {
+        return page_id;
+    }
+
+    public Boolean getIs_favorite() {
+        return is_favorite;
+    }
+
+
+    public Post(String id,
+                long object_id,
+                String message,
+                String full_picture,
+                String page_title,
+                int is_favorite,
+                long page_id
+
+    ){
         this.id = id;
         this.object_id = object_id;
         this.message = message;
         this.full_picture = full_picture;
+        this.page_title = page_title;
+        this.is_favorite = is_favorite==1?true:false;
+        this.page_id = page_id;
     }
     public Post(Cursor c){
         this(c.getString(Constants.COL_POST_FB_ID),
                 c.getLong(Constants.COL_POST_OBJECT_ID),
                 c.getString(Constants.COL_POST_MESSAGE),
-                c.getString(Constants.COL_POST_PICTURE));
+                c.getString(Constants.COL_POST_PICTURE),
+                c.getString(Constants.COL_POST_TITLE),
+                c.getInt(Constants.COL_POST_FAVORITE),
+                c.getLong(Constants.COL_POST_PAGE_ID)
+        );
         this._ID = c.getLong(Constants.COL_POST_ID);
     }
     public long get_ID() {

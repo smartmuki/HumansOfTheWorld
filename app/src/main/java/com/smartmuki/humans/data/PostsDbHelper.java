@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class PostsDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
 
-    static final String DATABASE_NAME = "movies.db";
+    static final String DATABASE_NAME = "posts.db";
     public PostsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -22,9 +22,12 @@ public class PostsDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + PostsContract.PostEntry.TABLE_NAME + " (" +
                 PostsContract.PostEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 PostsContract.PostEntry.COLUMN_ID+ " TEXT UNIQUE NOT NULL, " +
-                PostsContract.PostEntry.COLUMN_OBJECT_ID + " REAL UNIQUE NOT NULL, " +
+                PostsContract.PostEntry.COLUMN_OBJECT_ID + " REAL NOT NULL, " +
                 PostsContract.PostEntry.COLUMN_MESSAGE+ " TEXT NOT NULL, " +
-                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL "+
+                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_FAVORITE + " INTEGER,"+
+                PostsContract.PostEntry.COLUMN_PAGE_ID + " INTEGER NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_PAGE_TITLE + " TEXT NOT NULL "+
                 " );";
         final String SQL_CREATE_FAV_TABLE = "CREATE TABLE " + PostsContract.FavoriteEntry.TABLE_NAME + " (" +
                 PostsContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +

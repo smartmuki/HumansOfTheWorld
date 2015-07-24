@@ -50,14 +50,17 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mListView.clear();
-        while (data.moveToNext()){
-            Post post = new Post(data);
-            BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
-            card.setDescription(post.getMessage());
-            card.setTitle("Title");
-            card.setDrawable(post.getFull_pictureUrlString());
-            mListView.add(card);
+        if(data!=null){
+            while (data.moveToNext()){
+                Post post = new Post(data);
+                BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
+                card.setDescription(post.getMessage());
+                card.setTitle("Title");
+                card.setDrawable(post.getFull_pictureUrlString());
+                mListView.add(card);
+            }
         }
+
     }
 
     @Override

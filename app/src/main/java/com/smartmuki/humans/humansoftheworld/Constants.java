@@ -14,11 +14,17 @@ public class Constants {
             PostsContract.PostEntry.COLUMN_ID,
             PostsContract.PostEntry.COLUMN_OBJECT_ID,
             PostsContract.PostEntry.COLUMN_MESSAGE,
-            PostsContract.PostEntry.COLUMN_PICTURE
+            PostsContract.PostEntry.COLUMN_PICTURE,
+            PostsContract.PostEntry.COLUMN_PAGE_ID,
+            PostsContract.PostEntry.COLUMN_FAVORITE,
+            PostsContract.PostEntry.COLUMN_PAGE_TITLE
     };
     public static final int COL_POST_ID = 0;
     public static final int COL_POST_FB_ID = 1;
     public static final int COL_POST_OBJECT_ID= 2;
     public static final int COL_POST_MESSAGE = 3;
     public static final int COL_POST_PICTURE = 4;
+    public static final int COL_POST_PAGE_ID = 5;
+    public static final int COL_POST_FAVORITE = 6;
+    public static final int COL_POST_TITLE = 7;
 }

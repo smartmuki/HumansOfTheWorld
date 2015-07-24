@@ -19,6 +19,9 @@ public class PostsContract {
         public static final String COLUMN_OBJECT_ID = "object_id";
         public static final String COLUMN_MESSAGE = "message";
         public static final String COLUMN_PICTURE = "full_picture";
+        public static final String COLUMN_FAVORITE = "is_favorite";
+        public static final String COLUMN_PAGE_ID = "page_id";
+        public static final String COLUMN_PAGE_TITLE = "page_title";
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POSTS;
         public static final String CONTENT_ITEM_TYPE =
