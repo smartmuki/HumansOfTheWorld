@@ -201,9 +201,16 @@ public class PostsProvider extends ContentProvider {
         db.beginTransaction();
         try{
             for(ContentValues cv:values){
-                long _id = db.insert(PostsContract.PostEntry.TABLE_NAME, null, cv);
-                if (_id != -1) {
-                    returnCount++;
+                if(cv.getAsString("message") != null) {
+                    try {
+                        long _id = db.insert(PostsContract.PostEntry.TABLE_NAME, null, cv);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    catch(Exception e) {
+                        // Need to insert a new tuple only if the tuple is not present already.
+                    }
                 }
             }
             db.setTransactionSuccessful();

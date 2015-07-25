@@ -2,21 +2,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/black">
 
-    <ImageView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/home_background">
-    </ImageView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/humansOfTheWorld"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="@dimen/home_heading_size"
-        />
+
+        android:layout_height="@dimen/dialog_fixed_width_minor">
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/humansOfTheWorld"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:typeface="monospace"
+            android:textSize="@dimen/home_heading_size"
+
+            />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="0dp"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

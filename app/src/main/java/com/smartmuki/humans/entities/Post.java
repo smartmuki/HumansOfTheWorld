@@ -18,6 +18,7 @@ public class Post {
     private Boolean is_favorite;
     private long page_id;
     private String page_title;
+    private String created_time;
 
     public void setPage_title(String page_title) {
         this.page_title = page_title;
@@ -29,6 +30,10 @@ public class Post {
 
     public String getPage_title() {
         return page_title;
+    }
+
+    public String getCreated_time() {
+        return created_time;
     }
 
     public long getPage_id() {
@@ -46,8 +51,8 @@ public class Post {
                 String full_picture,
                 String page_title,
                 int is_favorite,
-                long page_id
-
+                long page_id,
+                String created_time
     ){
         this.id = id;
         this.object_id = object_id;
@@ -55,6 +60,7 @@ public class Post {
         this.full_picture = full_picture;
         this.page_title = page_title;
         this.is_favorite = is_favorite==1?true:false;
+        this.created_time = created_time;
         this.page_id = page_id;
     }
     public Post(Cursor c){
@@ -64,7 +70,8 @@ public class Post {
                 c.getString(Constants.COL_POST_PICTURE),
                 c.getString(Constants.COL_POST_TITLE),
                 c.getInt(Constants.COL_POST_FAVORITE),
-                c.getLong(Constants.COL_POST_PAGE_ID)
+                c.getLong(Constants.COL_POST_PAGE_ID),
+                c.getString(Constants.COL_CREATED_DATE)
         );
         this._ID = c.getLong(Constants.COL_POST_ID);
     }

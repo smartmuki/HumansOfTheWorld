@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         }
         else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
-            loginButton.setReadPermissions("user_friends");
+            //loginButton.setReadPermissions("user_friends");
 
             // Callback registration
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {

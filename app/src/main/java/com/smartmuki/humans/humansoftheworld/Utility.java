@@ -33,6 +33,7 @@ public class Utility {
         postDetails.put(PostsContract.PostEntry.COLUMN_PICTURE, post.getFull_pictureUrlString());
         postDetails.put(PostsContract.PostEntry.COLUMN_PAGE_ID, post.getPage_id());
         postDetails.put(PostsContract.PostEntry.COLUMN_PAGE_TITLE, post.getPage_title());
+        postDetails.put(PostsContract.PostEntry.COLUMN_CREATED_TIME, post.getCreated_time());
         return postDetails;
     }
     public static boolean isInternetAvailable(Context c){

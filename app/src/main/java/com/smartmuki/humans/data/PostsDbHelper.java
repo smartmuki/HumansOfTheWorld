@@ -27,7 +27,8 @@ public class PostsDbHelper extends SQLiteOpenHelper {
                 PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL, "+
                 PostsContract.PostEntry.COLUMN_FAVORITE + " INTEGER,"+
                 PostsContract.PostEntry.COLUMN_PAGE_ID + " INTEGER NOT NULL, "+
-                PostsContract.PostEntry.COLUMN_PAGE_TITLE + " TEXT NOT NULL "+
+                PostsContract.PostEntry.COLUMN_PAGE_TITLE + " TEXT NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL "+
                 " );";
         final String SQL_CREATE_FAV_TABLE = "CREATE TABLE " + PostsContract.FavoriteEntry.TABLE_NAME + " (" +
                 PostsContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +

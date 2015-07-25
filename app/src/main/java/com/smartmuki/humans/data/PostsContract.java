@@ -22,6 +22,7 @@ public class PostsContract {
         public static final String COLUMN_FAVORITE = "is_favorite";
         public static final String COLUMN_PAGE_ID = "page_id";
         public static final String COLUMN_PAGE_TITLE = "page_title";
+        public static final String COLUMN_CREATED_TIME = "created_time";
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POSTS;
         public static final String CONTENT_ITEM_TYPE =
@@ -29,15 +30,14 @@ public class PostsContract {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_POSTS).build();
+
         public static Uri buildUriForPosts() {
             return CONTENT_URI
                     .buildUpon()
                     .build();
         }
         public static Uri buildUriForPost(long id) {
-            return ContentUris
-                    .withAppendedId(CONTENT_URI, id)
-                  ;
+            return ContentUris.withAppendedId(CONTENT_URI, id);
         }
         public static long getIdFromURI(Uri uri){
             return Long.parseLong(uri.getPathSegments().get(1));

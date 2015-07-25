@@ -17,7 +17,8 @@ public class Constants {
             PostsContract.PostEntry.COLUMN_PICTURE,
             PostsContract.PostEntry.COLUMN_PAGE_ID,
             PostsContract.PostEntry.COLUMN_FAVORITE,
-            PostsContract.PostEntry.COLUMN_PAGE_TITLE
+            PostsContract.PostEntry.COLUMN_PAGE_TITLE,
+            PostsContract.PostEntry.COLUMN_CREATED_TIME
     };
     public static final int COL_POST_ID = 0;
     public static final int COL_POST_FB_ID = 1;
@@ -27,4 +28,5 @@ public class Constants {
     public static final int COL_POST_PAGE_ID = 5;
     public static final int COL_POST_FAVORITE = 6;
     public static final int COL_POST_TITLE = 7;
+    public static final int COL_CREATED_DATE = 8;
 }

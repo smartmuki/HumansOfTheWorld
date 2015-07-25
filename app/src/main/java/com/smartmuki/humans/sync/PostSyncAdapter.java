@@ -102,7 +102,7 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     protected  ArrayList<Post> getPostForPage(Page page){
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,object_id,message,description,full_picture,source");
+        parameters.putString("fields", "id,object_id,message,description,full_picture,source,created_time");
         GraphResponse gr = new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 page.getName(),

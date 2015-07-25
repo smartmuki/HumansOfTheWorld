@@ -42,7 +42,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
         String sortOrder;
         switch (id){
             case FEED_LOADER:
-                return new CursorLoader(getActivity(), PostsContract.PostEntry.buildUriForPosts(), Constants.POST_COLUMNS, null, null, null);
+                return new CursorLoader(getActivity(), PostsContract.PostEntry.buildUriForPosts(), Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
             default: throw new UnsupportedOperationException("No such loader");
         }
     }
@@ -55,7 +55,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                 Post post = new Post(data);
                 BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
                 card.setDescription(post.getMessage());
-                card.setTitle("Title");
+                card.setTitle(post.getPage_title());
                 card.setDrawable(post.getFull_pictureUrlString());
                 mListView.add(card);
             }
