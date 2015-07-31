@@ -2,13 +2,13 @@ package com.smartmuki.humans.humansoftheworld;
 
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +33,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     @Bind(R.id.material_listview)
     MaterialListView mListView ;
     Account mAccount;
+    String pref_name = "firstRun";
     private static final int FEED_LOADER = 0;
     public FeedsFragment() {
     }
@@ -79,27 +80,22 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
         ButterKnife.bind(this, view);
-        mAccount = CreateSyncAccount(this.getActivity());
+        mAccount = Utility.CreateSyncAccount(this.getActivity());
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(
                 ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
-        return view;
-    }
-    public static Account CreateSyncAccount(Context context) {
-
-        Account newAccount = new Account(context.getString(R.string.sync_account), context.getString(R.string.sync_account_type));
-        AccountManager accountManager =
-                (AccountManager) context.getSystemService(
-                        Context.ACCOUNT_SERVICE);
-        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+        SharedPreferences prefs = getActivity().getSharedPreferences(
+                PostsContract.CONTENT_AUTHORITY, Context.MODE_PRIVATE);
+        if(prefs.getBoolean(pref_name,false)){
 
         } else {
-
+            ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
+            prefs.edit().putBoolean(pref_name,true).apply();
         }
-        ContentResolver.setSyncAutomatically(newAccount, PostsContract.CONTENT_AUTHORITY, true);
-        return newAccount;
+
+        return view;
     }
+
 }

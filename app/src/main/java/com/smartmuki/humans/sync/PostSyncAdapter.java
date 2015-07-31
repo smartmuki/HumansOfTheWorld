@@ -34,7 +34,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
 
 /**
  * Created by abmitra on 6/28/2015.
@@ -69,17 +68,11 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
                         return posts;
                     }
                 })
-                .reduce(new ArrayList<Post>(), new Func2<ArrayList<Post>, Post, ArrayList<Post>>() {
+                .buffer(20)
+                .subscribe(new Action1<List<Post>>() {
                     @Override
-                    public ArrayList<Post> call(ArrayList<Post> posts, Post post) {
-                        posts.add(post);
-                        return posts;
-                    }
-                })
-                .subscribe(new Action1<ArrayList<Post>>() {
-                    @Override
-                    public void call(ArrayList<Post> posts) {
-                        persistToDB(posts);
+                    public void call(List<Post> posts) {
+                        persistToDB((ArrayList)posts);
                     }
                 })
                 .isUnsubscribed();

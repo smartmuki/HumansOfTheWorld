@@ -1,5 +1,7 @@
 package com.smartmuki.humans.humansoftheworld;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -95,5 +97,18 @@ public class Utility {
                 Log.e(TAG, "Error closing stream", e);
             }
         }
+    }
+    public static Account CreateSyncAccount(Context context){
+        Account newAccount = new Account(context.getString(R.string.sync_account), context.getString(R.string.sync_account_type));
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(
+                        Context.ACCOUNT_SERVICE);
+        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+
+        } else {
+
+        }
+        //ContentResolver.setSyncAutomatically(newAccount, PostsContract.CONTENT_AUTHORITY, true);
+        return newAccount;
     }
 }
