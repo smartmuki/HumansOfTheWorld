@@ -17,12 +17,18 @@
         <!--app:column_count_landscape="2"-->
         <!--android:id="@+id/material_listview"/>-->
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/feed_recycler_view_id"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/feed_recycler_view_id"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

@@ -12,6 +12,8 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>{
+public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>,SwipeRefreshLayout.OnRefreshListener{
 
 
 //    @Bind(R.id.material_listview)
@@ -44,6 +46,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     RecyclerFeedAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
+    SwipeRefreshLayout swipeLayout;
 
     public FeedsFragment() {
     }
@@ -122,6 +125,15 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
 
     }
 
+    @Override public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                // @ABHIK - add the refresh handler here.
+                swipeLayout.setRefreshing(false);
+            }
+        }, 5000);
+    }
+
     @Override
     public void onStart() {
         getLoaderManager().initLoader(FEED_LOADER, null, this);
@@ -147,6 +159,13 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
             ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
             prefs.edit().putBoolean(pref_name,true).apply();
         }
+
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         return view;
     }
