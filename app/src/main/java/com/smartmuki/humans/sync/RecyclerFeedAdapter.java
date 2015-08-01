@@ -1,9 +1,7 @@
 package com.smartmuki.humans.sync;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,6 @@ import com.smartmuki.humans.entities.Post;
 import com.smartmuki.humans.humansoftheworld.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -66,17 +62,6 @@ public class RecyclerFeedAdapter extends RecyclerView.Adapter<RecyclerFeedAdapte
         customViewHolder.feedText.setText(feedItem.getMessage());
 //        customViewHolder.feedImage.setImageDrawable(LoadImageFromWebOperations(feedItem.getFull_pictureUrlString()));
         Picasso.with(mContext).load(feedItem.getFull_pictureUrlString()).into(customViewHolder.feedImage);
-    }
-
-    private Drawable LoadImageFromWebOperations(String strPhotoUrl) {
-        try {
-            InputStream is = (InputStream) new URL(strPhotoUrl).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            Log.e("ERRRROR", e.toString());
-            return null;
-        }
     }
 
     @Override

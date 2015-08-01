@@ -89,6 +89,8 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                                 return true;
                             }
 
+
+
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {

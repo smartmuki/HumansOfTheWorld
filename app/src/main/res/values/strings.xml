@@ -12,4 +12,8 @@
     <string name="content_authority">android.smartmuki.posts</string>
     <string name="sync_account_type">android.smartmuki.com</string>
     <string name="sync_account">android.smartmuki.com</string>
+
+    <!-- Ad configs -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- ca-app-pub-6322503284296720/3898585295 -->
 </resources>
