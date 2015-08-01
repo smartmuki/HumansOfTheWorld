@@ -5,14 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.dexafree.materialList.view.MaterialListView;
-
-import butterknife.Bind;
-
 
 public class FeedsActivity extends Activity {
-    @Bind(R.id.material_listview)
-    MaterialListView mListView ;
+//    @Bind(R.id.material_listview)
+//    MaterialListView mListView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

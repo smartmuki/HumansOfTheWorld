@@ -2,6 +2,7 @@ package com.smartmuki.humans.humansoftheworld;
 
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
@@ -11,16 +12,20 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.dexafree.materialList.cards.BigImageButtonsCard;
-import com.dexafree.materialList.view.MaterialListView;
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.smartmuki.humans.data.PostsContract;
 import com.smartmuki.humans.entities.Post;
+import com.smartmuki.humans.sync.RecyclerFeedAdapter;
 
-import butterknife.Bind;
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 
 
@@ -30,11 +35,16 @@ import butterknife.ButterKnife;
 public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>{
 
 
-    @Bind(R.id.material_listview)
-    MaterialListView mListView ;
+//    @Bind(R.id.material_listview)
+//    MaterialListView mListView ;
+
     Account mAccount;
     String pref_name = "firstRun";
     private static final int FEED_LOADER = 0;
+    RecyclerFeedAdapter adapter;
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+
     public FeedsFragment() {
     }
 
@@ -50,18 +60,59 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mListView.clear();
+//        mListView.clear();
+        final Activity currentActivity = this.getActivity();
+        recyclerView = (RecyclerView) currentActivity.findViewById(R.id.feed_recycler_view_id);
+        layoutManager = new LinearLayoutManager(currentActivity);
+        recyclerView.setLayoutManager(layoutManager);
+
+        final ArrayList<Post> posts = new ArrayList<Post>();
         if(data!=null){
             while (data.moveToNext()){
                 Post post = new Post(data);
-                BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
-                card.setDescription(post.getMessage());
-                card.setTitle(post.getPage_title());
-                card.setDrawable(post.getFull_pictureUrlString());
-                mListView.add(card);
+                posts.add(post);
+//                BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
+//                card.setDescription(post.getMessage());
+//                card.setTitle(post.getPage_title());
+//                card.setDrawable(post.getFull_pictureUrlString());
+//                mListView.add(card);
             }
         }
 
+        adapter = new RecyclerFeedAdapter(this.getActivity(), posts);
+        recyclerView.setAdapter(adapter);
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(recyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    //@ABHIK: update the db here.
+                                    posts.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    Toast.makeText(currentActivity, "Added to favourites.", Toast.LENGTH_SHORT).show();
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    //@ABHIK: update the db here.
+                                    posts.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    Toast.makeText(currentActivity, "Deleted from your feed.", Toast.LENGTH_SHORT).show();
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+        recyclerView.addOnItemTouchListener(swipeTouchListener);
     }
 
     @Override
@@ -88,8 +139,8 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                 ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         SharedPreferences prefs = getActivity().getSharedPreferences(
                 PostsContract.CONTENT_AUTHORITY, Context.MODE_PRIVATE);
-        if(prefs.getBoolean(pref_name,false)){
 
+        if(prefs.getBoolean(pref_name,false)){
         } else {
             ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
             prefs.edit().putBoolean(pref_name,true).apply();
