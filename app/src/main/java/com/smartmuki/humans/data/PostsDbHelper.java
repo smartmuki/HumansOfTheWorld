@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class PostsDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
 
     static final String DATABASE_NAME = "posts.db";
     public PostsDbHelper(Context context) {
@@ -28,23 +28,16 @@ public class PostsDbHelper extends SQLiteOpenHelper {
                 PostsContract.PostEntry.COLUMN_FAVORITE + " INTEGER,"+
                 PostsContract.PostEntry.COLUMN_PAGE_ID + " INTEGER NOT NULL, "+
                 PostsContract.PostEntry.COLUMN_PAGE_TITLE + " TEXT NOT NULL, "+
-                PostsContract.PostEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL "+
+                PostsContract.PostEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_DELETED + " INTEGER"+
                 " );";
-        final String SQL_CREATE_FAV_TABLE = "CREATE TABLE " + PostsContract.FavoriteEntry.TABLE_NAME + " (" +
-                PostsContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                PostsContract.FavoriteEntry.COLUMN_ID+ " TEXT UNIQUE NOT NULL, " +
-                PostsContract.FavoriteEntry.COLUMN_OBJECT_ID + " REAL UNIQUE NOT NULL, " +
-                PostsContract.FavoriteEntry.COLUMN_MESSAGE+ " TEXT NOT NULL, " +
-                PostsContract.FavoriteEntry.COLUMN_PICTURE + " TEXT NOT NULL "+
-                " );";
+
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_FAV_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + PostsContract.PostEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + PostsContract.FavoriteEntry.TABLE_NAME);
         onCreate(db);
     }
 }

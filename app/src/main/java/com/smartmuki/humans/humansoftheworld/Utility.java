@@ -36,6 +36,8 @@ public class Utility {
         postDetails.put(PostsContract.PostEntry.COLUMN_PAGE_ID, post.getPage_id());
         postDetails.put(PostsContract.PostEntry.COLUMN_PAGE_TITLE, post.getPage_title());
         postDetails.put(PostsContract.PostEntry.COLUMN_CREATED_TIME, post.getCreated_time());
+        postDetails.put(PostsContract.PostEntry.COLUMN_DELETED, post.getIsDeleted()?1:0);
+        postDetails.put(PostsContract.PostEntry.COLUMN_FAVORITE, post.getIs_favorite()?1:0);
         return postDetails;
     }
     public static boolean isInternetAvailable(Context c){

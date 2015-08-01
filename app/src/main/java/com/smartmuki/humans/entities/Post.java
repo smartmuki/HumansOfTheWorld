@@ -15,10 +15,15 @@ public class Post {
     private long object_id;
     private String message;
     private String full_picture;
-    private Boolean is_favorite;
+private Boolean is_favorite;
     private long page_id;
     private String page_title;
     private String created_time;
+    private Boolean isDeleted;
+
+    public void setIs_favorite(Boolean is_favorite) {
+        this.is_favorite = is_favorite;
+    }
 
     public void setPage_title(String page_title) {
         this.page_title = page_title;
@@ -43,6 +48,13 @@ public class Post {
     public Boolean getIs_favorite() {
         return is_favorite;
     }
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
 
     public Post(String id,
@@ -52,7 +64,8 @@ public class Post {
                 String page_title,
                 int is_favorite,
                 long page_id,
-                String created_time
+                String created_time,
+                int isDeleted
     ){
         this.id = id;
         this.object_id = object_id;
@@ -62,6 +75,8 @@ public class Post {
         this.is_favorite = is_favorite==1?true:false;
         this.created_time = created_time;
         this.page_id = page_id;
+        this.isDeleted = isDeleted==1?true:false;
+
     }
     public Post(Cursor c){
         this(c.getString(Constants.COL_POST_FB_ID),
@@ -71,7 +86,8 @@ public class Post {
                 c.getString(Constants.COL_POST_TITLE),
                 c.getInt(Constants.COL_POST_FAVORITE),
                 c.getLong(Constants.COL_POST_PAGE_ID),
-                c.getString(Constants.COL_CREATED_DATE)
+                c.getString(Constants.COL_CREATED_DATE),
+                c.getInt(Constants.COL_DELETED)
         );
         this._ID = c.getLong(Constants.COL_POST_ID);
     }

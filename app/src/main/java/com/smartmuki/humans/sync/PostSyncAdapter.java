@@ -132,8 +132,18 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
             Gson gson = new Gson();
             Type collectionType = new TypeToken<List<Post>>() {
             }.getType();
-            return (ArrayList<Post>) gson.fromJson(list.toString(), collectionType);
+            ArrayList<Object> a =  gson.fromJson(list.toString(), collectionType);
+            ArrayList<Post> posts =  new ArrayList<Post>(a.size());
+            for (Object obj:a) {
+                Post p = (Post) obj;
+                p.setIs_favorite(false);
+                p.setIsDeleted(false);
+                posts.add(p);
+            }
+
+            return posts;
         } catch (Exception e){
+            Log.d(TAG, "Error while generating post. " + e.toString());
             return new ArrayList<Post>();
         }
     }

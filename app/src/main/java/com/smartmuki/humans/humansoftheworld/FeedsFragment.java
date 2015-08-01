@@ -47,6 +47,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     SwipeRefreshLayout swipeLayout;
+    int index = 0;
 
     public FeedsFragment() {
     }
@@ -62,23 +63,35 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState!=null){
+            index = savedInstanceState.getInt("index",0);
+        }
+
+
+    }
+
+    @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        mListView.clear();
         final Activity currentActivity = this.getActivity();
         recyclerView = (RecyclerView) currentActivity.findViewById(R.id.feed_recycler_view_id);
-        layoutManager = new LinearLayoutManager(currentActivity);
-        recyclerView.setLayoutManager(layoutManager);
+        if(layoutManager==null){
+            layoutManager = new LinearLayoutManager(currentActivity);
+            recyclerView.setLayoutManager(layoutManager);
+        }
+
+        if(index ==0){
+            index  = layoutManager.findFirstVisibleItemPosition();
+        }
+
+
 
         final ArrayList<Post> posts = new ArrayList<Post>();
         if(data!=null){
             while (data.moveToNext()){
                 Post post = new Post(data);
                 posts.add(post);
-//                BigImageButtonsCard card = new BigImageButtonsCard (getActivity());
-//                card.setDescription(post.getMessage());
-//                card.setTitle(post.getPage_title());
-//                card.setDrawable(post.getFull_pictureUrlString());
-//                mListView.add(card);
             }
         }
 
@@ -97,7 +110,9 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                             @Override
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    //@ABHIK: update the db here.
+                                    Post post = posts.get(position);
+                                    post.setIs_favorite(true);
+                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
                                     posts.remove(position);
                                     adapter.notifyItemRemoved(position);
                                     Toast.makeText(currentActivity, "Added to favourites.", Toast.LENGTH_SHORT).show();
@@ -108,7 +123,9 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                             @Override
                             public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    //@ABHIK: update the db here.
+                                    Post post = posts.get(position);
+                                    post.setIsDeleted(true);
+                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
                                     posts.remove(position);
                                     adapter.notifyItemRemoved(position);
                                     Toast.makeText(currentActivity, "Deleted from your feed.", Toast.LENGTH_SHORT).show();
@@ -118,6 +135,8 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                         });
 
         recyclerView.addOnItemTouchListener(swipeTouchListener);
+        layoutManager.scrollToPosition(index);
+        index = 0;
     }
 
     @Override
@@ -128,7 +147,12 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
-                // @ABHIK - add the refresh handler here.
+                Bundle settingsBundle = new Bundle();
+                settingsBundle.putBoolean(
+                        ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                settingsBundle.putBoolean(
+                        ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+                ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
                 swipeLayout.setRefreshing(false);
             }
         }, 5000);
@@ -136,7 +160,13 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
 
     @Override
     public void onStart() {
-        getLoaderManager().initLoader(FEED_LOADER, null, this);
+        if(getLoaderManager().getLoader(FEED_LOADER)==null){
+            getLoaderManager().initLoader(FEED_LOADER, null, this);
+        } else {
+            getLoaderManager().restartLoader(FEED_LOADER, null, this);
+
+        }
+
         super.onStart();
     }
 
@@ -170,4 +200,19 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
         return view;
     }
 
+    @Override
+    public void onPause() {
+        if(layoutManager!=null){
+
+            index = layoutManager.findFirstVisibleItemPosition();
+        }
+
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("index",index);
+        super.onSaveInstanceState(outState);
+    }
 }
