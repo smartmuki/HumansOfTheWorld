@@ -4,4 +4,6 @@
     tools:context="com.smartmuki.humans.humansoftheworld.FeedsActivity">
     <item android:id="@+id/action_favorites" android:title="@string/action_favourites"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_logout" android:title="@string/action_logout"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

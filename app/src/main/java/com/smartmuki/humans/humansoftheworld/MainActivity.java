@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     Log.d(FBTAG, "Login to facebook successful");
-                    Intent intent = new Intent(getApplicationContext(), FeedsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
 
