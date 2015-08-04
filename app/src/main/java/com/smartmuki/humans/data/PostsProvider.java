@@ -72,8 +72,8 @@ public class PostsProvider extends ContentProvider {
                 try{
                     retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
                             projection,
-                            null,
-                            null,
+                            PostsContract.PostEntry.COLUMN_DELETED+"= ?",
+                            new String[]{"0"},
                             null,
                             null,
                             sortOrder);
@@ -89,8 +89,8 @@ public class PostsProvider extends ContentProvider {
                 try {
                     retCursor = favQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                             projection,
-                            selection,
-                            selectionArgs,
+                            PostsContract.PostEntry.COLUMN_FAVORITE+"= ?",
+                            new String[]{"1"},
                             null,
                             null,
                             sortOrder);
@@ -191,7 +191,7 @@ public class PostsProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        int _id = db.update(PostsContract.FavoriteEntry.TABLE_NAME,values, selection, selectionArgs);
+        int _id = db.update(PostsContract.PostEntry.TABLE_NAME,values, selection, selectionArgs);
         getContext().getContentResolver().notifyChange( uri, null);
         return _id;
     }

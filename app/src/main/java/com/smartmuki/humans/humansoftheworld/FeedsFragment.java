@@ -11,12 +11,14 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     Account mAccount;
     String pref_name = "firstRun";
     private static final int FEED_LOADER = 0;
+    private static final int FAVORITE_LOADER = 1;
     RecyclerFeedAdapter adapter;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -55,9 +58,14 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder;
+        Uri uri ;
         switch (id){
             case FEED_LOADER:
-                return new CursorLoader(getActivity(), PostsContract.PostEntry.buildUriForPosts(), Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
+                uri = PostsContract.PostEntry.buildUriForPosts();
+                return new CursorLoader(getActivity(), uri, Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
+//            case FAVORITE_LOADER:
+//                uri = PostsContract.FavoriteEntry.buildUriForPosts();
+//                break;
             default: throw new UnsupportedOperationException("No such loader");
         }
     }
@@ -65,6 +73,7 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if(savedInstanceState!=null){
             index = savedInstanceState.getInt("index",0);
         }
@@ -214,5 +223,13 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("index",index);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.action_favorites){
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
