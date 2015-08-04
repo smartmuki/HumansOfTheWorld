@@ -1,7 +1,9 @@
 package com.smartmuki.humans.humansoftheworld;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,9 +35,17 @@ public class MainActivity extends Activity {
             // NOTE: Access token expires in 60 days.
             // TODO: AccessToken.refreshCurrentAccessTokenAsync(); if the token is about to get expired.
             Log.d(FBTAG, "User already logged to facebook successful");
-            Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+
+            SharedPreferences prefs = this.getSharedPreferences(SettingsActivity.HelpSettings, Context.MODE_PRIVATE);
+            if(prefs.getBoolean(SettingsActivity.HelpSettingsKey, false)) {
+                Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
         else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -46,9 +56,16 @@ public class MainActivity extends Activity {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     Log.d(FBTAG, "Login to facebook successful");
-                    Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+                    SharedPreferences prefs = getApplicationContext().getSharedPreferences(SettingsActivity.HelpSettings, Context.MODE_PRIVATE);
+                    if(prefs.getBoolean(SettingsActivity.HelpSettingsKey, false)) {
+                        Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 
                 @Override

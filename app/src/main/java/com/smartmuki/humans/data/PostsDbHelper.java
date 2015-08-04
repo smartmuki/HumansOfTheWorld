@@ -24,7 +24,7 @@ public class PostsDbHelper extends SQLiteOpenHelper {
                 PostsContract.PostEntry.COLUMN_ID+ " TEXT UNIQUE NOT NULL, " +
                 PostsContract.PostEntry.COLUMN_OBJECT_ID + " REAL NOT NULL, " +
                 PostsContract.PostEntry.COLUMN_MESSAGE+ " TEXT NOT NULL, " +
-                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT NOT NULL, "+
+                PostsContract.PostEntry.COLUMN_PICTURE + " TEXT, "+
                 PostsContract.PostEntry.COLUMN_FAVORITE + " INTEGER,"+
                 PostsContract.PostEntry.COLUMN_PAGE_ID + " INTEGER NOT NULL, "+
                 PostsContract.PostEntry.COLUMN_PAGE_TITLE + " TEXT NOT NULL, "+

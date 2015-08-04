@@ -5,7 +5,6 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.smartmuki.humans.humansoftheworld.FeedsFragment">
-
     <!--<com.dexafree.materialList.view.MaterialListView-->
         <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
         <!--android:layout_width="fill_parent"-->
@@ -17,7 +16,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

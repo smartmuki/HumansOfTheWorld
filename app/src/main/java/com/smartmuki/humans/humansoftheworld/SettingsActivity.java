@@ -41,6 +41,8 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    public static final String HelpSettings = "android.smartmuki.viewedHelp";
+    public static final String HelpSettingsKey = "isHelpShown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
