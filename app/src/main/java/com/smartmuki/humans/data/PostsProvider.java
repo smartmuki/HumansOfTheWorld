@@ -87,7 +87,7 @@ public class PostsProvider extends ContentProvider {
                 break;
             case FAV_MOVIES:
                 try {
-                    retCursor = favQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                    retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
                             projection,
                             PostsContract.PostEntry.COLUMN_FAVORITE+"= ?",
                             new String[]{"1"},
