@@ -2,7 +2,6 @@ package com.smartmuki.humans.humansoftheworld;
 
 
 import android.accounts.Account;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
@@ -30,6 +29,7 @@ import com.smartmuki.humans.sync.RecyclerFeedAdapter;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
@@ -39,17 +39,19 @@ import butterknife.ButterKnife;
 public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>,SwipeRefreshLayout.OnRefreshListener{
 
 
-//    @Bind(R.id.material_listview)
-//    MaterialListView mListView ;
+    @Bind(R.id.feed_recycler_view_id)
+    RecyclerView recyclerView;
 
     Account mAccount;
     String pref_name = "firstRun";
     private static final int FEED_LOADER = 0;
     private static final int FAVORITE_LOADER = 1;
     RecyclerFeedAdapter adapter;
-    RecyclerView recyclerView;
+
     LinearLayoutManager layoutManager;
     SwipeRefreshLayout swipeLayout;
+    Boolean dataDismissedBySwipe = false;
+    ArrayList<Post> posts;
     int index = 0;
 
     public FeedsFragment() {
@@ -63,9 +65,6 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
             case FEED_LOADER:
                 uri = PostsContract.PostEntry.buildUriForPosts();
                 return new CursorLoader(getActivity(), uri, Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
-//            case FAVORITE_LOADER:
-//                uri = PostsContract.FavoriteEntry.buildUriForPosts();
-//                break;
             default: throw new UnsupportedOperationException("No such loader");
         }
     }
@@ -83,68 +82,21 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        final Activity currentActivity = this.getActivity();
-        recyclerView = (RecyclerView) currentActivity.findViewById(R.id.feed_recycler_view_id);
-        if(layoutManager==null){
-            layoutManager = new LinearLayoutManager(currentActivity);
-            recyclerView.setLayoutManager(layoutManager);
-        }
 
-        if(index ==0){
-            index  = layoutManager.findFirstVisibleItemPosition();
-        }
-
-
-
-        final ArrayList<Post> posts = new ArrayList<Post>();
-        if(data!=null){
+        if(data!=null && data.getCount() != posts.size()){
+            posts.clear();
             while (data.moveToNext()){
                 Post post = new Post(data);
                 posts.add(post);
+                adapter.notifyDataSetChanged();
             }
         }
+        if(!dataDismissedBySwipe){
+            layoutManager.scrollToPosition(index);
 
-        adapter = new RecyclerFeedAdapter(this.getActivity(), posts);
-        recyclerView.setAdapter(adapter);
-        SwipeableRecyclerViewTouchListener swipeTouchListener =
-                new SwipeableRecyclerViewTouchListener(recyclerView,
-                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
-                            @Override
-                            public boolean canSwipe(int position) {
-                                return true;
-                            }
-
-
-
-                            @Override
-                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    Post post = posts.get(position);
-                                    post.setIs_favorite(true);
-                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
-                                    posts.remove(position);
-                                    adapter.notifyItemRemoved(position);
-                                    Toast.makeText(currentActivity, "Added to favourites.", Toast.LENGTH_SHORT).show();
-                                }
-                                adapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    Post post = posts.get(position);
-                                    post.setIsDeleted(true);
-                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
-                                    posts.remove(position);
-                                    adapter.notifyItemRemoved(position);
-                                    Toast.makeText(currentActivity, "Deleted from your feed.", Toast.LENGTH_SHORT).show();
-                                }
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-        recyclerView.addOnItemTouchListener(swipeTouchListener);
-        layoutManager.scrollToPosition(index);
+        } else {
+            dataDismissedBySwipe = false;
+        }
         index = 0;
     }
 
@@ -205,7 +157,57 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        if(layoutManager==null){
+            layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+        }
+        if(index ==0){
+            index  = layoutManager.findFirstVisibleItemPosition();
+        }
+        posts = new ArrayList<Post>();
+        adapter = new RecyclerFeedAdapter(this.getActivity(), posts);
+        recyclerView.setAdapter(adapter);
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(recyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                            @Override
+                            public boolean canSwipe(int position) {
+                                return true;
+                            }
 
+
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    Post post = posts.get(position);
+                                    post.setIs_favorite(true);
+                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
+                                    posts.remove(position);
+                                    dataDismissedBySwipe =true;
+                                    adapter.notifyItemRemoved(position);
+                                    Toast.makeText(getActivity(), "Added to favourites.", Toast.LENGTH_SHORT).show();
+                                }
+                                //adapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    Post post = posts.get(position);
+                                    post.setIsDeleted(true);
+                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post), "_id=" + post.get_ID(),null);
+                                    posts.remove(position);
+                                    dataDismissedBySwipe =true;
+                                    adapter.notifyItemRemoved(position);
+                                    Toast.makeText(getActivity(), "Deleted from your feed.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                //adapter.notifyDataSetChanged();
+                            }
+                        });
+        recyclerView.addOnItemTouchListener(swipeTouchListener);
         return view;
     }
 
@@ -232,4 +234,5 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

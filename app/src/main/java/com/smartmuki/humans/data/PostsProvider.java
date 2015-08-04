@@ -72,8 +72,8 @@ public class PostsProvider extends ContentProvider {
                 try{
                     retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
                             projection,
-                            PostsContract.PostEntry.COLUMN_DELETED+"= ?",
-                            new String[]{"0"},
+                            PostsContract.PostEntry.COLUMN_DELETED+"= ? AND "+PostsContract.PostEntry.COLUMN_FAVORITE+"= ?",
+                            new String[]{"0","0"},
                             null,
                             null,
                             sortOrder);
