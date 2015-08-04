@@ -40,7 +40,9 @@ public class FeedsActivity extends Activity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_favorites) {
-            return true;
+            Intent favouriteIntent = new Intent(getApplicationContext(), FeedsActivity.class);
+            favouriteIntent.putExtra("isFavourite", true);
+            startActivity(favouriteIntent);
         }
         else if(id == R.id.action_logout) {
             LoginManager.getInstance().logOut();

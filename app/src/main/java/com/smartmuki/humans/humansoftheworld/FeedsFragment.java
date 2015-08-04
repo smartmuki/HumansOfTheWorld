@@ -8,6 +8,7 @@ import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -18,7 +19,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -50,6 +50,8 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     SwipeRefreshLayout swipeLayout;
+    private boolean isFavorite = false;
+
     int index = 0;
 
     public FeedsFragment() {
@@ -57,15 +59,15 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder;
-        Uri uri ;
+        Uri loaderURI = PostsContract.PostEntry.buildUriForPosts();
+
+        if(isFavorite) {
+            loaderURI = PostsContract.FavoriteEntry.buildUriForPosts();
+        }
+
         switch (id){
             case FEED_LOADER:
-                uri = PostsContract.PostEntry.buildUriForPosts();
-                return new CursorLoader(getActivity(), uri, Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
-//            case FAVORITE_LOADER:
-//                uri = PostsContract.FavoriteEntry.buildUriForPosts();
-//                break;
+                return new CursorLoader(getActivity(), loaderURI, Constants.POST_COLUMNS, null, null, Constants.POST_COLUMNS[Constants.COL_CREATED_DATE] + " DESC");
             default: throw new UnsupportedOperationException("No such loader");
         }
     }
@@ -74,6 +76,9 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        Intent intent = this.getActivity().getIntent();
+        isFavorite = intent.getBooleanExtra("isFavourite", false);
         if(savedInstanceState!=null){
             index = savedInstanceState.getInt("index",0);
         }
@@ -223,13 +228,5 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("index",index);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.action_favorites){
-
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

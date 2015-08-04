@@ -33,8 +33,9 @@ public class MainActivity extends Activity {
             // NOTE: Access token expires in 60 days.
             // TODO: AccessToken.refreshCurrentAccessTokenAsync(); if the token is about to get expired.
             Log.d(FBTAG, "User already logged to facebook successful");
-            Intent intent = new Intent(getApplicationContext(), FeedsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         }
         else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
                     Log.d(FBTAG, "Login to facebook successful");
                     Intent intent = new Intent(getApplicationContext(), FeedsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    finish();
                 }
 
                 @Override
