@@ -108,6 +108,7 @@ public class PostsProvider extends ContentProvider {
                 String favIdSelection = PostsContract.FavoriteEntry.TABLE_NAME + "." + PostsContract.FavoriteEntry._ID + " = ? ";
                 long fav_ID = PostsContract.PostEntry.getIdFromURI(uri);
                 try {
+
                     retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
                             projection,
                             favIdSelection,
@@ -206,12 +207,24 @@ public class PostsProvider extends ContentProvider {
             for(ContentValues cv:values){
                 if(cv.getAsString("message") != null) {
                     try {
-                        long _id = db.insert(PostsContract.PostEntry.TABLE_NAME, null, cv);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
+                        String idSelection = PostsContract.PostEntry.TABLE_NAME + "." + PostsContract.PostEntry.COLUMN_ID + " = ? ";
+                        Cursor retCursor = queryBuilder.query(mOpenHelper.getReadableDatabase(),
+                                null,
+                                idSelection,
+                                new String[]{cv.getAsString(PostsContract.PostEntry.COLUMN_ID)},
+                                null,
+                                null,
+                                null);
+                       if(retCursor.getCount()==0){
+                           long _id = db.insert(PostsContract.PostEntry.TABLE_NAME, null, cv);
+                           if (_id != -1) {
+                               returnCount++;
+                           }
+                       }
+
                     }
                     catch(Exception e) {
+                        Log.e("Exception!!!","LOL");
                         // Need to insert a new tuple only if the tuple is not present already.
                     }
                 }
@@ -220,7 +233,9 @@ public class PostsProvider extends ContentProvider {
         } finally {
             db.endTransaction();
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        if(returnCount>=1){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return returnCount;
     }
 }

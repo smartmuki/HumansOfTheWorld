@@ -26,8 +26,8 @@ public class WifiAndChargingReceiver extends BroadcastReceiver {
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                 status == BatteryManager.BATTERY_STATUS_FULL;
-        Log.e(Tag,"Battery Status: is charging "+ String.valueOf(isCharging));
-        Log.e(Tag,"Network Status: is wifi "+ String.valueOf(isWifi));
+        Log.d(Tag,"Battery Status: is charging "+ String.valueOf(isCharging));
+        Log.d(Tag,"Network Status: is wifi "+ String.valueOf(isWifi));
         if(isWifi){
             Account mAccount=  Utility.CreateSyncAccount(context);
             Bundle settingsBundle = new Bundle();
@@ -35,7 +35,7 @@ public class WifiAndChargingReceiver extends BroadcastReceiver {
                     ContentResolver.SYNC_EXTRAS_MANUAL, true);
             settingsBundle.putBoolean(
                     ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            Log.e(Tag, "Requesting sync ");
+            Log.d(Tag, "Requesting sync ");
             ContentResolver.requestSync(mAccount, PostsContract.CONTENT_AUTHORITY, settingsBundle);
         }
     }

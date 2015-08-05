@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.smartmuki.humans.data.PostsContract;
 import com.smartmuki.humans.entities.Post;
+import com.smartmuki.humans.sync.PostSyncAdapter;
 import com.smartmuki.humans.sync.RecyclerFeedAdapter;
 
 import java.util.ArrayList;
@@ -96,8 +97,12 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
             while (data.moveToNext()){
                 Post post = new Post(data);
                 posts.add(post);
-                adapter.notifyDataSetChanged();
             }
+            if(PostSyncAdapter.numberOfRequests == 1 || PostSyncAdapter.numberOfRequests==0){
+
+
+            }
+            adapter.notifyDataSetChanged();
         }
         if(!dataDismissedBySwipe){
             layoutManager.scrollToPosition(index);

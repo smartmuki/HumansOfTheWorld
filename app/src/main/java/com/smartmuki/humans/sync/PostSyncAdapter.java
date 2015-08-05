@@ -33,6 +33,8 @@ import java.util.Vector;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
+import rx.functions.Action2;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 /**
@@ -40,13 +42,14 @@ import rx.functions.Func1;
  */
 public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String TAG = PostSyncAdapter.class.getSimpleName();
+    public static int numberOfRequests = 0;
     ContentResolver contentResolver ;
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
       getPages();
     }
     protected void getPages(){
-        Observable.create(new Observable.OnSubscribe<Page>() {
+    Observable<Post> ob =  Observable.create(new Observable.OnSubscribe<Page>() {
             @Override
             public void call(Subscriber<? super Page> subscriber) {
                 ArrayList<Page> pages = getPagesFromServer();
@@ -59,6 +62,7 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
                 .map(new Func1<Page, ArrayList<Post>>() {
                     @Override
                     public ArrayList<Post> call(Page page) {
+                        numberOfRequests++;
                         return getPostForPage(page);
                     }
                 })
@@ -67,15 +71,43 @@ public class PostSyncAdapter extends AbstractThreadedSyncAdapter {
                     public ArrayList<Post> call(ArrayList<Post> posts) {
                         return posts;
                     }
-                })
-                .buffer(20)
-                .subscribe(new Action1<List<Post>>() {
-                    @Override
-                    public void call(List<Post> posts) {
-                        persistToDB((ArrayList)posts);
-                    }
-                })
-                .isUnsubscribed();
+                });
+
+            ob.take(40).collect(new Func0<ArrayList<Post>>() {
+                @Override
+                public ArrayList<Post> call() {
+                    return new ArrayList<Post>();
+                }
+            }, new Action2<ArrayList<Post>, Post>() {
+                @Override
+                public void call(ArrayList<Post> posts, Post post) {
+                    posts.add(post);
+                }
+            }).subscribe(new Action1<List<Post>>() {
+            @Override
+                public void call(List<Post> posts) {
+                    numberOfRequests--;
+                    persistToDB((ArrayList) posts);
+                }
+            });
+
+            ob.skip(40).collect(new Func0<ArrayList<Post>>() {
+            @Override
+            public ArrayList<Post> call() {
+                return new ArrayList<Post>();
+            }
+        }, new Action2<ArrayList<Post>, Post>() {
+            @Override
+            public void call(ArrayList<Post> posts, Post post) {
+                posts.add(post);
+            }
+        }).subscribe(new Action1<List<Post>>() {
+            @Override
+            public void call(List<Post> posts) {
+                numberOfRequests--;
+                persistToDB((ArrayList) posts);
+            }
+        }).isUnsubscribed();
     }
     protected  ArrayList<Page> getPagesFromServer(){
         Uri.Builder builder = new Uri.Builder();
