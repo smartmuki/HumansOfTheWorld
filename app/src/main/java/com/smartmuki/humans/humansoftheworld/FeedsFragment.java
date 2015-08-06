@@ -14,13 +14,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.smartmuki.humans.data.PostsContract;
@@ -195,11 +197,11 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                                 for (int position : reverseSortedPositions) {
                                     Post post = posts.get(position);
                                     post.setIs_favorite(true);
-                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post),"_id=" + post.get_ID(),null);
+                                    getActivity().getContentResolver().update(PostsContract.PostEntry.buildUriForPost(posts.get(position).get_ID()), Utility.changePostToContentValue(post), "_id=" + post.get_ID(), null);
                                     posts.remove(position);
                                     dataDismissedBySwipe =true;
                                     adapter.notifyItemRemoved(position);
-                                    Toast.makeText(getActivity(), "Added to favourites.", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getActivity().findViewById(R.id.colayout),"Added to favorites",Snackbar.LENGTH_SHORT).show();
                                 }
                                 //adapter.notifyDataSetChanged();
 
@@ -214,13 +216,16 @@ public class FeedsFragment extends Fragment  implements LoaderManager.LoaderCall
                                     posts.remove(position);
                                     dataDismissedBySwipe =true;
                                     adapter.notifyItemRemoved(position);
-                                    Toast.makeText(getActivity(), "Deleted from your feed.", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getActivity().findViewById(R.id.colayout), "Deleted from your feeds", Snackbar.LENGTH_SHORT).show();
+
                                 }
 
                                 //adapter.notifyDataSetChanged();
                             }
                         });
         recyclerView.addOnItemTouchListener(swipeTouchListener);
+        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        ((ActionBarActivity) getActivity()).setSupportActionBar(toolbar);
         return view;
     }
 

@@ -1,8 +1,8 @@
 package com.smartmuki.humans.humansoftheworld;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +11,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 
-public class FeedsActivity extends Activity {
+public class FeedsActivity extends ActionBarActivity {
 //    @Bind(R.id.material_listview)
 //    MaterialListView mListView ;
 
